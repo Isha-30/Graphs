@@ -1,0 +1,33 @@
+import java.util.*;
+public class Graph {
+    public static void addEdge(ArrayList<ArrayList<Integer>> adj, int u, int v){
+        adj.get(u).add(v);
+    }
+
+    public static void topologicalSort(ArrayList<ArrayList<Integer>> adj, int V){
+        int[] inDegree = new int[V];
+
+        for(int i = 0; i<V; i++){
+            for(int x : adj.get(i)){
+                inDegree[x]++;
+            }
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int i = 0; i<V; i++){
+            if(inDegree[i] ==0)
+                q.add(i);
+        }
+
+        while(!q.isEmpty()){
+            int u = q.poll();
+            System.out.print(u + " ");
+
+            for(int x : adj.get(u)){
+                if(--inDegree[x] == 0)
+                    q.add(x);
+            }
+        }
+    }
+}
