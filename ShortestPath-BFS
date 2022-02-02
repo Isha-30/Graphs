@@ -1,0 +1,34 @@
+import java.util.*;
+public class Graph {
+    public static void addEdge(ArrayList<ArrayList<Integer>> adj, int u, int v){
+        adj.get(u).add(v);
+        adj.get(v).add(u);
+    }
+
+    public static void shortestPath(ArrayList<ArrayList<Integer>> adj, int s, int V){
+        int[] dis = new int[V];
+        for(int i = 0; i<V; i++)
+            dis[i] = Integer.MAX_VALUE;
+
+        dis[s] = 0;
+        boolean[] visited = new boolean[V];
+        Queue<Integer> q = new LinkedList<>();
+        q.add(s);
+        visited[s] = true;
+
+        while(!q.isEmpty()){
+            int u = q.poll();
+            for(int i: adj.get(u)){
+                if(visited[i] == false){
+                    dis[i] = dis[u]+1;
+                    visited[i] = true;
+                    q.add(i);
+                }
+            }
+        }
+
+        for(int x: dis){
+            System.out.print(x + " ");
+        }
+    }
+}
