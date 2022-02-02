@@ -17,6 +17,8 @@ public class Graph {
     
     public void DFS(ArrayList<ArrayList<Integer>> adj, int V){
         boolean visited[] = new boolean[V];
+        for(int i = 0; i<V; i++)
+            visited[i] = false;
         DFSrec(adj, 0, visited);
     }
 }
