@@ -1,61 +1,32 @@
-import java.io.*;
-import java.util.*;
-
-public class Main {
-   static class Edge {
-      int src;
-      int nbr;
-      int wt;
-
-      Edge(int src, int nbr, int wt){
-         this.src = src;
-         this.nbr = nbr;
-         this.wt = wt;
-      }
-   }
-   public static void main(String[] args) throws Exception {
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-      int vtces = Integer.parseInt(br.readLine());
-      ArrayList<Edge>[] graph = new ArrayList[vtces];
-      for(int i = 0; i < vtces; i++){
-         graph[i] = new ArrayList<>();
-      }
-
-      int edges = Integer.parseInt(br.readLine());
-      for(int i = 0; i < edges; i++){
-         String[] parts = br.readLine().split(" ");
-         int v1 = Integer.parseInt(parts[0]);
-         int v2 = Integer.parseInt(parts[1]);
-         int wt = Integer.parseInt(parts[2]);
-         graph[v1].add(new Edge(v1, v2, wt));
-         graph[v2].add(new Edge(v2, v1, wt));
-      }
-
-      int src = Integer.parseInt(br.readLine());
-      int dest = Integer.parseInt(br.readLine());
-
-      // write your code here
-      boolean[] visited = new boolean[vtces];
-   
-      System.out.println(hasPath(graph, src, dest, visited));
+class Solution {
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        
+        //make graph
+        for(int i = 0; i<n; i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        for(int[] edge : edges){
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+        }
+        boolean[] visited = new boolean[n];
+        return hasPath(adj, source, destination, visited);
     }
-
-   public static boolean hasPath(ArrayList<Edge>[] graph, int src, int des, boolean[] visited){
-      if(src == des)
-         return true;
-
-      visited[src]= true;
-
-      for(Edge g : graph[src]){
-         if(visited[g.nbr] == false){
-            boolean nbrPath = hasPath(graph, g.nbr, des, visited);
-
-            if(nbrPath == true)
-               return true;
-         }
-      }
-
-      return false;
-   }
+    
+    private boolean hasPath(ArrayList<ArrayList<Integer>> adj, int src, int des, boolean[] visited){
+        if(src == des)
+            return true;
+        
+        visited[src] = true;
+        
+        for(int edge : adj.get(src)){
+            if(visited[edge] == false){
+                boolean path = hasPath(adj, edge, des, visited);
+                if(path)
+                    return true;
+            }
+        }
+        return false;
+    }
 }
