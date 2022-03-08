@@ -1,0 +1,25 @@
+class Solution {
+    public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int i = 0; i < n; i++) {
+            if (manager[i] != -1) {
+                List<Integer> ls = graph.get(manager[i]);
+                ls.add(i);
+            }
+        }
+        return rec(headID, graph, informTime);
+    }
+    
+    private int rec(int headID, List<List<Integer>> graph, int[] informTime) {
+        int totalMins = 0;
+        List<Integer> ls = graph.get(headID);
+        for (int i = 0; i < ls.size(); i++) {
+            int minutes = informTime[headID] + rec(ls.get(i), graph, informTime);
+            totalMins = Math.max(minutes, totalMins);
+        }
+        return totalMins;
+    }
+}
