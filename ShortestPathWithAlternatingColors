@@ -1,0 +1,53 @@
+class Solution {
+    public int[] shortestAlternatingPaths(int n, int[][] red_edges, int[][] blue_edges) {
+        int[] ans = new int[n];
+        HashMap<Integer, List<Integer>> red = new HashMap<>();
+        HashMap<Integer, List<Integer>> blue = new HashMap<>();
+        for(int[] r : red_edges) {
+            List<Integer> list = red.getOrDefault(r[0], new ArrayList<>());
+            list.add(r[1]);
+            red.put(r[0], list);
+        }
+        for(int[] b : blue_edges) {
+            List<Integer> list = blue.getOrDefault(b[0], new ArrayList<>());
+            list.add(b[1]);
+            blue.put(b[0], list);
+        }
+        Arrays.fill(ans, -1);
+        ans[0] = 0;
+        int d = 1;
+        boolean[] visited = new boolean[2*n];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(0);
+        queue.add(null);
+        while(!queue.isEmpty()) {
+            Integer cur = queue.remove();
+            if(cur == null) {
+                if(!queue.isEmpty()){
+                    queue.add(null);
+                    d++;
+                }
+            }
+            else if(visited[cur+n] == false) {
+                visited[cur+n] = true;
+                if(cur >= 0) {  /* Previous node is node-0 or Previous edge is blue */
+                    if(red.containsKey(cur)){
+                        for(int r : red.get(cur)) {
+                            if(ans[r] == -1) ans[r] = d;
+                            queue.add(-r);
+                        }
+                    }
+                }
+                if(cur <= 0) {  /* Previous node is node-0 or Previous edge is red */
+                    if(blue.containsKey(-cur)){
+                        for(int b : blue.get(-cur)) {
+                            if(ans[b] == -1) ans[b] = d;
+                            queue.add(b);
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
